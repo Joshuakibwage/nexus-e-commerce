@@ -5,6 +5,7 @@ import { GET_PRODUCT } from '@/graphql/queries';
 import { Product } from '@/types';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getImageUrl, formatPrice } from '@/lib/utils';
 
 
 interface GetProductProps {
@@ -46,7 +47,7 @@ function ProductDetail({ product }: { product: Product }) {
               {
                 product.images.length > 0 ? (
                   <Image
-                    src={`https://project-nexus-backend-q5ai.onrender.com/images/${product.images[0].id}`}
+                    src={getImageUrl(product.images[0].id)}
                     alt={product.name}
                     className="w-full h-full object-cover"
                   />
@@ -69,7 +70,7 @@ function ProductDetail({ product }: { product: Product }) {
                         className="aspect-square bg-gray-100 rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-blue-500"
                       >
                         <Image
-                          src={`https://project-nexus-backend-q5ai.onrender.com/images/${image.id}`}
+                          src={getImageUrl(product.images[0].id)}
                           alt={product.name}
                           className="w-full h-full object-cover"
                         />
@@ -99,7 +100,7 @@ function ProductDetail({ product }: { product: Product }) {
 
               <div className="flex items-baseline gap-2 mb-4">
                 <span className="text-3xl font-bold text-gray-900">
-                  {product.currency} {product.priceAmount}
+                    {formatPrice(product.priceAmount, product.currency)}
                 </span>
               </div>
 
@@ -186,7 +187,7 @@ function ProductNotFound() {
       >
         Back to Products
       </Link>
-      
+
     </div>
   );
 }

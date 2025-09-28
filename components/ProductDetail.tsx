@@ -5,6 +5,8 @@ import { GetProduct } from '@/graphql/queries';
 import { useParams } from 'next/navigation';
 import { Product } from '@/types';
 import Image from 'next/image';
+import { getImageUrl, formatPrice } from '@/lib/utils';
+
 
 
 const ProductDetail = () => {
@@ -27,16 +29,16 @@ const ProductDetail = () => {
 
                 <div>
                     <Image
-                        src={`https://project-nexus-backend-q5ai.onrender.com/images/${product.images[0]?.id}`} 
+                        src={getImageUrl(product.images[0].id)}
                         alt={product.name}
                         className="w-full h-auto rounded-lg"
                     />
                 </div>
-                
+
                 <div>
                     <h1 className="text-3xl font-bold">{product.name}</h1>
                     <p className="text-gray-600 mt-4">{product.description}</p>
-                    <p className="text-2xl font-bold mt-4">{product.priceAmount} {product.currency}</p>
+                    <p className="text-2xl font-bold mt-4">  {formatPrice(product.priceAmount, product.currency)}</p>
                     <p className="mt-2">Category: {product.category.name}</p>
                 </div>
 
