@@ -5,7 +5,7 @@ import { GET_PRODUCTS } from '@/graphql/queries';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Product } from '@/types';
-import ProductCard from '@/ProductCard';
+import ProductCard from '@/components/ProductCard';
 import { useMemo } from 'react';
 
 export default function ProductList() {
