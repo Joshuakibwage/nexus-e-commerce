@@ -22,6 +22,7 @@ export default function SearchBar() {
             onChange={(e) => dispatch(setSearchQuery(e.target.value))}
             className="w-full p-2 bg-gray-100 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 text-black"
         />
+
     </div>
   );
 }

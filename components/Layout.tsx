@@ -7,7 +7,7 @@ import apolloClient from '@/lib/apolloClient';
 import { store } from '@/store/store';
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
-
+import Footer from "@/components/Footer";
 
 interface LayoutProps {
   children: ReactNode;
@@ -41,6 +41,8 @@ export default function Layout({ children }: LayoutProps) {
             <main className="max-w-7xl mx-auto px-4 py-6">
                 {children}
             </main>
+
+            <Footer />
         </div>
       </Provider>
     </ApolloProvider>
