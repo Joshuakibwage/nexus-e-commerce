@@ -2,9 +2,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import filterReducer from '@/store/slices/filterSlice';
 
 export const store = configureStore({
-    reducer: {
-        filters: filterReducer,
-    },
+  reducer: {
+    filters: filterReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,47 +1,57 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { GetCategories } from '@/graphql/queries';
-import { setCategory } from '@/store/slices/filterSlice';
+import { GET_CATEGORIES } from '@/graphql/queries';
 import { useDispatch, useSelector } from 'react-redux';
+import { setCategory } from '@/store/slices/filterSlice';
 import { RootState } from '@/store/store';
+import { Category } from '@/types';
 
 
-const CategoryFilter = () => {
 
-    const { data, loading, error } = useQuery(GetCategories);
-    const dispatch = useDispatch();
-    const selectedCategory = useSelector((state: RootState) => state.filters.selectedCategory);
+export default function CategoryFilter() {
 
-    if (loading) return <p>Loading categories...</p>;
-    if (error) return <p>Error: {error.message}</p>;
+  const { data, loading, error } = useQuery(GET_CATEGORIES);
+  const dispatch = useDispatch();
+  const selectedCategory = useSelector((state: RootState) => state.filters.selectedCategory);
 
-    const categories = data?.categories || [];
+  if (loading) return <div className="p-4">Loading categories...</div>;
+  if (error) return <div className="p-4 text-red-600">Error loading categories</div>;
 
-    return (
-        <div>
-            <label 
-                htmlFor="category-select" 
-                className="block text-sm font-medium text-gray-700">
-                    Filter by Category
-            </label>
-            <select
-                id="category-select"
-                value={selectedCategory || ''}
-                onChange={(e) => dispatch(setCategory(e.target.value || null))}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-            >
-                <option value="">All Categories</option>
-                {
-                    categories.map((category: any) => (
-                        <option key={category.id} value={category.id}>
-                            {category.name}
-                        </option>
-                    ))
-                }
-            </select>
+  const categories = data?.categories || [];
+
+  return (
+    <div className="bg-white p-4 rounded-lg shadow-sm border">
+
+        <h3 className="font-semibold mb-3">Filter by Category</h3>
+
+        <div className="space-y-2">
+            <button
+                onClick={() => dispatch(setCategory(null))}
+                className={`block w-full text-left px-3 py-2 rounded-md text-sm ${
+                    selectedCategory === null
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+                >
+                All Categories
+            </button>
+            {   
+                categories.map((category: Category) => (
+                    <button
+                        key={category.id}
+                        onClick={() => dispatch(setCategory(category.id))}
+                        className={`block w-full text-left px-3 py-2 rounded-md text-sm ${
+                        selectedCategory === category.id
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'text-gray-700 hover:bg-gray-100'
+                        }`}
+                    >
+                        {category.name}
+                    </button>
+                ))
+            }
         </div>
-    );
-};
-
-export default CategoryFilter;
+    </div>
+  );
+}
