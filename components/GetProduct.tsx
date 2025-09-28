@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { GET_PRODUCT } from '@/graphql/queries';
+import { getProducts } from '@/graphql/queries';
 import { Product } from '@/types';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -15,7 +15,7 @@ interface GetProductProps {
 
 export function GetProduct({ productId }: GetProductProps) {
 
-  const { data, loading, error } = useQuery(GET_PRODUCT, {
+  const { data, loading, error } = useQuery(getProducts, {
     variables: { id: productId },
   });
 

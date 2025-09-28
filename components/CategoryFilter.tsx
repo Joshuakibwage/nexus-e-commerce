@@ -1,7 +1,7 @@
 'use client';
 
-import { useQuery } from '@apollo/client';
-import { GET_CATEGORIES } from '@/graphql/queries';
+import { useQuery } from '@apollo/client/react';
+import { getCategories } from '@/graphql/queries';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategory, clearFilters } from '@/store/slices/filterSlice';
 import { RootState } from '@/store/store';
@@ -11,13 +11,13 @@ import { Category } from '@/types';
 
 export default function CategoryFilter() {
 
-  const { data, loading, error } = useQuery(GET_CATEGORIES);
+  const { data, loading, error } = useQuery(getCategories);
   const dispatch = useDispatch();
   const { selectedCategory, sortOrder, searchQuery } = useSelector((state: RootState) => state.filters);
 
   const hasActiveFilters = selectedCategory !== null || sortOrder !== null || searchQuery !== '';
 
-  if (loading) return <div className="p-4">Loading categories...</div>;
+  if (loading) return <div className="p-4 text-gray-800">Loading categories...</div>;
   if (error) return <div className="p-4 text-red-600">Error loading categories</div>;
 
   const categories = data?.categories || [];

@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { GetProduct } from '@/graphql/queries';
+import { getProducts } from '@/graphql/queries';
 import { useParams } from 'next/navigation';
 import { Product } from '@/types';
 import Image from 'next/image';
@@ -14,7 +14,7 @@ const ProductDetail = () => {
     const params = useParams();
     const id = params.id as string;
 
-    const { data, loading, error } = useQuery(GetProduct, {
+    const { data, loading, error } = useQuery(getProducts, {
         variables: { id },
     });
 

@@ -1,7 +1,7 @@
 'use client';
 
-import { useQuery } from '@apollo/client';
-import { GET_PRODUCTS } from '@/graphql/queries';
+import { useQuery } from '@apollo/client/react';
+import { getProducts } from '@/graphql/queries';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Product } from '@/types';
@@ -10,7 +10,7 @@ import { useMemo } from 'react';
 
 export default function ProductList() {
 
-  const { data, loading, error } = useQuery(GET_PRODUCTS);
+  const { data, loading, error } = useQuery(getProducts);
   const { selectedCategory, sortOrder, searchQuery } = useSelector((state: RootState) => state.filters);
 
   // Filtering and sorting products based on current filters
