@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { getProducts } from '@/graphql/queries';
 import { useParams } from 'next/navigation';
 import { Product } from '@/types';

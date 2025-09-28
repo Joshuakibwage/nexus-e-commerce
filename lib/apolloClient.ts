@@ -6,7 +6,9 @@ const httpLink = createHttpLink({
   uri: 'https://project-nexus-backend-q5ai.onrender.com/graphql/',
 });
 
-export const apolloClient = new ApolloClient({
+const apolloClient = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache(),
 });
+
+export default apolloClient;

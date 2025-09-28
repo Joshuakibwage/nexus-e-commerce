@@ -3,7 +3,7 @@
 import { ReactNode } from 'react';
 import { ApolloProvider } from '@apollo/client/react';
 import { Provider } from 'react-redux';
-import { apolloClient } from '@/lib/apolloClient';
+import apolloClient from '@/lib/apolloClient';
 import { store } from '@/store/store';
 
 interface LayoutProps {
