@@ -13,7 +13,7 @@ export default function ProductList() {
   const { data, loading, error } = useQuery(GET_PRODUCTS);
   const { selectedCategory, sortOrder, searchQuery } = useSelector((state: RootState) => state.filters);
 
-  // Filter and sort products based on current filters
+  // Filtering and sorting products based on current filters
   const filteredAndSortedProducts = useMemo(() => {
 
     if (!data?.products) return [];
@@ -25,7 +25,7 @@ export default function ProductList() {
       return matchesCategory && matchesSearch;
     });
 
-    // Sort products by price
+    // Sorting products by price
     if (sortOrder) {
 
       products = products.sort((a: Product, b: Product) => {
@@ -66,3 +66,6 @@ export default function ProductList() {
     </div>
   );
 }
+
+
+

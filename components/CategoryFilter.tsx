@@ -3,7 +3,7 @@
 import { useQuery } from '@apollo/client';
 import { GET_CATEGORIES } from '@/graphql/queries';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategory } from '@/store/slices/filterSlice';
+import { setCategory, clearFilters } from '@/store/slices/filterSlice';
 import { RootState } from '@/store/store';
 import { Category } from '@/types';
 
@@ -13,7 +13,9 @@ export default function CategoryFilter() {
 
   const { data, loading, error } = useQuery(GET_CATEGORIES);
   const dispatch = useDispatch();
-  const selectedCategory = useSelector((state: RootState) => state.filters.selectedCategory);
+  const { selectedCategory, sortOrder, searchQuery } = useSelector((state: RootState) => state.filters);
+
+  const hasActiveFilters = selectedCategory !== null || sortOrder !== null || searchQuery !== '';
 
   if (loading) return <div className="p-4">Loading categories...</div>;
   if (error) return <div className="p-4 text-red-600">Error loading categories</div>;
@@ -23,7 +25,20 @@ export default function CategoryFilter() {
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border">
 
-        <h3 className="font-semibold mb-3">Filter by Category</h3>
+        <div className="flex justify-between items-center mb-3">
+
+            <h3 className="font-semibold">Filter by Category</h3>
+            {
+                hasActiveFilters && (
+                    <button
+                        onClick={() => dispatch(clearFilters())}
+                        className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                        Clear All
+                    </button>
+                )
+            }
+        </div>
 
         <div className="space-y-2">
             <button
@@ -33,10 +48,10 @@ export default function CategoryFilter() {
                     ? 'bg-blue-100 text-blue-800'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
-                >
+            >
                 All Categories
             </button>
-            {   
+            {
                 categories.map((category: Category) => (
                     <button
                         key={category.id}
