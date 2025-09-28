@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Product } from '@/types';
 import Image from 'next/image';
+import { getImageUrl, formatPrice } from '@/lib/utils';
+
 
 
 interface ProductItemProps {
@@ -13,13 +15,12 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
             <Link href={`/product/${product.id}`}>
                 <div>
                     <Image
-                        src={`https://project-nexus-backend-q5ai.onrender.com/images/${product.images[0]?.id}`} 
-                        alt={product.name}
+                        src={getImageUrl(product?.images?.[0]?.id ?? '/placeholder.png')}                        alt={product.name}
                         className="w-full h-48 object-cover mb-4"
                     />
                     <h3 className="text-lg font-semibold">{product.name}</h3>
                     <p className="text-gray-600">{product.description}</p>
-                    <p className="text-gray-800 font-bold">{product.priceAmount} {product.currency}</p>
+                    <p className="text-gray-800 font-bold">{formatPrice(product.priceAmount, product.currency)}</p>
                 </div>
             </Link>
         </div>

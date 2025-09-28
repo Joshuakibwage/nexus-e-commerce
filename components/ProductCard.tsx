@@ -17,7 +17,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer">
             <div className="h-48 bg-gray-200 flex items-center justify-center">
                 {
-                    product.images.length > 0 ? (
+                    product.images?.length ? (
                         <Image
                             src={getImageUrl(product.images[0].id)}
                             alt={product.name}
@@ -40,7 +40,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     </span>
 
                     <span className="text-xs bg-gray-100 px-2 py-1 rounded">
-                        {product.category.name}
+                          {product.category?.name || 'Uncategorized'}
                     </span>
                 </div>
             </div>

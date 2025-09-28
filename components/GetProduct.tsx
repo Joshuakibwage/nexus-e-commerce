@@ -6,6 +6,7 @@ import { Product } from '@/types';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getImageUrl, formatPrice } from '@/lib/utils';
+import { GetProductQuery } from '@/types';
 
 
 interface GetProductProps {
@@ -15,7 +16,7 @@ interface GetProductProps {
 
 export function GetProduct({ productId }: GetProductProps) {
 
-  const { data, loading, error } = useQuery(getProducts, {
+  const { data, loading, error } = useQuery<GetProductQuery>(getProducts, {
     variables: { id: productId },
   });
 
@@ -27,6 +28,9 @@ export function GetProduct({ productId }: GetProductProps) {
 }
 
 function ProductDetail({ product }: { product: Product }) {
+
+  const images = product.images ?? [];
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Breadcrumb */}
@@ -45,9 +49,9 @@ function ProductDetail({ product }: { product: Product }) {
           <div>
             <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
               {
-                product.images.length > 0 ? (
+                images.length > 0 ? (
                   <Image
-                    src={getImageUrl(product.images[0].id)}
+                    src={getImageUrl(images[0].id)}
                     alt={product.name}
                     className="w-full h-full object-cover"
                   />
@@ -61,16 +65,16 @@ function ProductDetail({ product }: { product: Product }) {
             
             {/* Thumbnail Gallery */}
             {
-              product.images.length > 1 && (
+              images.length > 1 && (
                 <div className="grid grid-cols-4 gap-2">
                   {
-                    product.images.map((image) => (
+                    images.map((image) => (
                       <div
                         key={image.id}
                         className="aspect-square bg-gray-100 rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-blue-500"
                       >
                         <Image
-                          src={getImageUrl(product.images[0].id)}
+                          src={getImageUrl(images[0].id)}
                           alt={product.name}
                           className="w-full h-full object-cover"
                         />
@@ -86,7 +90,7 @@ function ProductDetail({ product }: { product: Product }) {
           <div className="flex flex-col">
             <div className="mb-4">
               <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium mb-2">
-                {product.category.name}
+                 {product.category?.name || 'Uncategorized'}
               </span>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 {product.name}
@@ -113,7 +117,7 @@ function ProductDetail({ product }: { product: Product }) {
                 <div className="border-t pt-4">
                   <h3 className="font-semibold mb-2">Product Details</h3>
                   <ul className="text-sm text-gray-600 space-y-1">
-                      <li>• Category: {product.category.name}</li>
+                      <li>• Category: {product.category?.name || 'Uncategorized'}</li>                      
                       <li>• Product ID: {product.id}</li>
                       <li>• Available for immediate purchase</li>
                   </ul>

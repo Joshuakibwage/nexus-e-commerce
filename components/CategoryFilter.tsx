@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCategory, clearFilters } from '@/store/slices/filterSlice';
 import { RootState } from '@/store/store';
 import { Category } from '@/types';
-
+import { CategoriesQuery } from '@/types';
 
 
 export default function CategoryFilter() {
 
-  const { data, loading, error } = useQuery(getCategories);
+  const { data, loading, error } = useQuery<CategoriesQuery>(getCategories);
   const dispatch = useDispatch();
   const { selectedCategory, sortOrder, searchQuery } = useSelector((state: RootState) => state.filters);
 
