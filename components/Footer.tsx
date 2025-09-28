@@ -74,31 +74,39 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-gray-400 text-sm">
-              © {currentYear} E-Commerce Catalog. All rights reserved.
-            </div>
-            <div className="flex flex-wrap justify-center space-x-6 text-sm">
-              <FooterLink href="/privacy" text="Privacy" small />
-              <FooterLink href="/terms" text="Terms" small />
-              <FooterLink href="/cookies" text="Cookies" small />
-              <FooterLink href="/sitemap" text="Sitemap" small />
-            </div>
-            <div className="flex items-center space-x-2 text-sm text-gray-400">
-              <span>Secure payments:</span>
-              <div className="flex space-x-2">
-                <PaymentIcon type="visa" />
-                <PaymentIcon type="mastercard" />
-                <PaymentIcon type="paypal" />
-                <PaymentIcon type="applepay" />
+
+
+        {/* Bottom Bar - Mobile Optimized */}
+        <div className="border-t border-gray-800">
+          <div className="max-w-7xl mx-auto px-4 py-6">
+            <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row justify-between items-center">
+              
+              {/* Copyright - Always centered on mobile */}
+              <div className="text-gray-400 text-sm text-center md:text-left order-2 md:order-1">
+                © {currentYear} E-Commerce Catalog. All rights reserved.
+              </div>
+              
+              {/* Legal Links - Centered on mobile */}
+              <div className="flex flex-wrap justify-center space-x-4 md:space-x-6 text-sm order-1 md:order-2">
+                <FooterLink href="/privacy" text="Privacy" small />
+                <FooterLink href="/terms" text="Terms" small />
+                <FooterLink href="/cookies" text="Cookies" small />
+                <FooterLink href="/sitemap" text="Sitemap" small />
+              </div>
+              
+              {/* Payment Methods - Hidden on very small screens */}
+              <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-400 order-3">
+                <span className="hidden lg:inline">Secure payments:</span>
+                <div className="flex space-x-1">
+                  <PaymentIcon type="visa" />
+                  <PaymentIcon type="mastercard" />
+                  <PaymentIcon type="paypal" />
+                  <PaymentIcon type="applepay" />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
     </footer>
   );
 }
@@ -186,3 +194,4 @@ function PaymentIcon({ type }: { type: string }) {
     </div>
   );
 }
+
