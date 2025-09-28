@@ -1,7 +1,7 @@
 'use client';
 
 import { ApolloProvider } from '@apollo/client';
-import client from '@/lib/apollo-client';
+import client from '@/lib/apolloClient';
 import { store } from '@/store/store';
 import { Provider } from 'react-redux';
 
