@@ -1,86 +1,68 @@
 'use client';
 
 import { useQuery } from '@apollo/client';
-import { GetProducts, GetCategories } from '@/graphql/queries';
-import { Product, Category } from '@/types';
+import { GET_PRODUCTS } from '@/graphql/queries';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import ProductItem from './ProductItem';
-import { useMemo, useState, useEffect } from 'react';
-import Pagination from './Pagination';
+import { Product } from '@/types';
+import ProductCard from '@/ProductCard';
+import { useMemo } from 'react';
 
+export default function ProductList() {
 
-const ITEMS_PER_PAGE = 10;
+  const { data, loading, error } = useQuery(GET_PRODUCTS);
+  const { selectedCategory, sortOrder, searchQuery } = useSelector((state: RootState) => state.filters);
 
+  // Filter and sort products based on current filters
+  const filteredAndSortedProducts = useMemo(() => {
 
-const ProductList = () => {
+    if (!data?.products) return [];
 
-    const { data: productsData, loading: productsLoading, error: productsError } = useQuery(GetProducts);
-    const { data: categoriesData, loading: categoriesLoading, error: categoriesError } = useQuery(GetCategories);
+    let products = data.products.filter((product: Product) => {
+      const matchesCategory = !selectedCategory || product.category.id === selectedCategory;
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           product.description.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
 
-    const { selectedCategory, sortOrder } = useSelector((state: RootState) => state.filters);
+    // Sort products by price
+    if (sortOrder) {
 
-    const [currentPage, setCurrentPage] = useState(1);
+      products = products.sort((a: Product, b: Product) => {
+        return sortOrder === 'asc' 
+          ? a.priceAmount - b.priceAmount 
+          : b.priceAmount - a.priceAmount;
+      });
+    }
 
-    // Reset to page 1 when filters or sort change
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [selectedCategory, sortOrder]);
+    return products;
+  }, [data?.products, selectedCategory, sortOrder, searchQuery]);
 
-    // If we are loading, show a loading message
-    if (productsLoading || categoriesLoading) return <p>Loading...</p>;
-    if (productsError) return <p>Error: {productsError.message}</p>;
-    if (categoriesError) return <p>Error: {categoriesError.message}</p>;
+  if (loading) return <div className="text-center py-8">Loading products...</div>;
+  if (error) return <div className="text-center py-8 text-red-600">Error loading products: {error.message}</div>;
 
-    const products: Product[] = productsData?.products || [];
-    const categories: Category[] = categoriesData?.categories || [];
-
-    // Filter and sort products
-    const filteredAndSortedProducts = useMemo(() => {
-
-        let filtered = products;
-        if (selectedCategory) {
-            filtered = filtered.filter(product => product.category.id === selectedCategory);
-        }
-
-        if (sortOrder) {
-            filtered = [...filtered].sort((a, b) => {
-                if (sortOrder === 'asc') {
-                    return a.priceAmount - b.priceAmount;
-                } else {
-                    return b.priceAmount - a.priceAmount;
-                }
-            });
-        }
-
-        return filtered;
-    }, [products, selectedCategory, sortOrder]);
-
-    // Calculate the products for the current page
-    const totalPages = Math.ceil(filteredAndSortedProducts.length / ITEMS_PER_PAGE);
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const currentProducts = filteredAndSortedProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
-    return (
-        <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {
-                    currentProducts.map(product => (
-                        <ProductItem 
-                            key={product.id} 
-                            product={product} 
-                        />
-                    ))
-                }
-            </div>
-            
-            <Pagination 
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-            />
+  return (
+    <div>
+        <div className="mb-4 text-sm text-gray-600">
+            Showing {filteredAndSortedProducts.length} products
         </div>
-    );
-};
-
-export default ProductList;
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {
+                filteredAndSortedProducts.map((product: Product) => (
+                    <ProductCard 
+                        key={product.id} 
+                        product={product} 
+                    />
+                ))
+            }
+        </div>
+        {
+            filteredAndSortedProducts.length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                    No products found matching your criteria.
+                </div>
+            )
+        }
+    </div>
+  );
+}
