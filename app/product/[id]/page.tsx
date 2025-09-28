@@ -1,5 +1,11 @@
-import ProductDetail from '@/components/ProductDetail';
+import { GetProduct } from '@/components/GetProduct';
 
-export default function ProductPage() {
-    return <ProductDetail />;
+interface ProductPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default function ProductPage({ params }: ProductPageProps) {
+  return <GetProduct productId={params.id} />;
 }
