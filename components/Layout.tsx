@@ -18,18 +18,18 @@ export default function Layout({ children }: LayoutProps) {
     <ApolloProvider client={apolloClient}>
       <Provider store={store}>
         <div className="min-h-screen bg-gray-50 w-full">
-            <header className="bg-white shadow-sm">
+            <header className="bg-gray-900 shadow-sm py-4">
                 <div className="max-w-[90%] mx-auto px-4 py-4 flex justify-between items-center">
                     <Link href="/">
-                      <h1 className="text-2xl font-bold text-gray-900">
-                          E-Commerce Catalog
+                      <h1 className="text-xl text-white font-semibold">
+                          Trovio
                       </h1>
                     </Link>
 
 
                     <Link href="/cart" className="relative">
                       <ShoppingCart 
-                        className="w-6 h-6 text-gray-600" 
+                        className="w-6 h-6 text-white" 
                       />
                       <span className="absolute -top-3 -right-1 bg-blue-400 text-gray-600 rounded-full w-4 h-4 flex items-center justify-center text-xs font-medium">
                         
@@ -38,7 +38,7 @@ export default function Layout({ children }: LayoutProps) {
 
                 </div>
             </header>
-            <main className="max-w-7xl mx-auto px-4 py-6">
+            <main className="max-w-7xl mx-auto px-4 py-6 min-h-screen">
                 {children}
             </main>
 
