@@ -46,7 +46,7 @@ const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
   }
 };
 
-// Convert GraphQL to REST-like calls using the same endpoint
+// API functions
 export const getCategories = async (): Promise<Category[]> => {
   const data = await fetchApi('/graphql/', {
     method: 'POST',

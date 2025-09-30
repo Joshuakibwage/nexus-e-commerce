@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Category, Product } from '@/lib/api';
+import { getCategories, getProducts, getProduct, Category, Product } from '@/lib/api';
 
-
+// Generic API hook
 export const useApi = <T,>(fetcher: () => Promise<T>, deps: any[] = []) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,18 +39,15 @@ export const useApi = <T,>(fetcher: () => Promise<T>, deps: any[] = []) => {
   return { data, loading, error };
 };
 
-// Specific hooks for each endpoint
+
 export const useCategories = () => {
-  const { getCategories } = await import('@/lib/api');
   return useApi(() => getCategories(), []);
 };
 
 export const useProducts = () => {
-  const { getProducts } = await import('@/lib/api');
   return useApi(() => getProducts(), []);
 };
 
 export const useProduct = (id: string) => {
-  const { getProduct } = await import('@/lib/api');
   return useApi(() => getProduct(id), [id]);
 };
