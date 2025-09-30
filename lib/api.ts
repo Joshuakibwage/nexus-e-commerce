@@ -1,25 +1,124 @@
-const BASE_URL = 'https://project-nexus-backend-q5ai.onrender.com';
+// Base API URL
+const API_BASE_URL = 'https://project-nexus-backend-q5ai.onrender.com';
 
-export async function fetchCategories() {
-  const response = await fetch(`${BASE_URL}/api/categories`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch categories');
-  }
-  return response.json();
+// Types
+export interface Category {
+  id: string;
+  name: string;
+  description: string;
 }
 
-export async function fetchProducts() {
-  const response = await fetch(`${BASE_URL}/api/products`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch products');
-  }
-  return response.json();
+export interface ProductImage {
+  id: string;
 }
 
-export async function fetchProduct(id: string) {
-  const response = await fetch(`${BASE_URL}/api/products/${id}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch product');
-  }
-  return response.json();
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  priceAmount: number;
+  currency: string;
+  images: ProductImage[];
+  category: Category;
 }
+
+// Helper function for API calls
+const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
+  const url = `${API_BASE_URL}${endpoint}`;
+  
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status} ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('API call failed:', error);
+    throw error;
+  }
+};
+
+// Convert GraphQL to REST-like calls using the same endpoint
+export const getCategories = async (): Promise<Category[]> => {
+  const data = await fetchApi('/graphql/', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: `
+        query GetCategories {
+          categories {
+            id
+            name
+            description
+          }
+        }
+      `,
+    }),
+  });
+  
+  return data.data.categories;
+};
+
+export const getProducts = async (): Promise<Product[]> => {
+  const data = await fetchApi('/graphql/', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: `
+        query GetProducts {
+          products {
+            id
+            name
+            description
+            priceAmount
+            currency
+            images {
+              id
+            }
+            category {
+              id
+              name
+            }
+          }
+        }
+      `,
+    }),
+  });
+  
+  return data.data.products;
+};
+
+export const getProduct = async (id: string): Promise<Product> => {
+  const data = await fetchApi('/graphql/', {
+    method: 'POST',
+    body: JSON.stringify({
+      query: `
+        query GetProduct($id: ID!) {
+          product(id: $id) {
+            id
+            name
+            description
+            priceAmount
+            currency
+            images {
+              id
+            }
+            category {
+              id
+              name
+            }
+          }
+        }
+      `,
+      variables: { id },
+    }),
+  });
+  
+  return data.data.product;
+};
