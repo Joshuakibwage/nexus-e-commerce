@@ -1,18 +1,36 @@
-// export type Category = {
-//   id: string;
-//   name: string;
-//   description: string;
-// };
+export type Category = {
+  id: string;
+  name: string;
+  description: string;
+  parent?: string;
+  children?: Category[];
+};
 
-// export type Product = {
-//   id: string;
-//   name: string;
-//   description: string;
-//   priceAmount: number;
-//   currency: string;
-//   images: { id: string }[];
-//   category: Category;
-// };
+export type ProductImage = {
+  id: string;
+  image: string; // URL string
+  alt_text?: string;
+};
+
+export type Product = {
+  id: string;
+  name: string;
+  description: string;
+  price_amount: number; // Note the underscore
+  currency: string;
+  images: ProductImage[];
+  category: Category;
+  in_stock?: boolean;
+  sku?: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type FilterState = {
+  selectedCategory: string | null;
+  sortOrder: 'asc' | 'desc' | null;
+  searchQuery: string;
+};
 
 export type FilterState = {
   selectedCategory: string | null;

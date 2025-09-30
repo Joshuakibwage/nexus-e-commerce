@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getCategories, getProducts, getProduct, Category, Product } from '@/lib/api';
+import { fetchCategories, fetchProducts, fetchProductById, Category, Product } from '@/lib/api';
 
 // Generic API hook
 export const useApi = <T,>(fetcher: () => Promise<T>, deps: any[] = []) => {
@@ -39,15 +39,15 @@ export const useApi = <T,>(fetcher: () => Promise<T>, deps: any[] = []) => {
   return { data, loading, error };
 };
 
-
+// Specific hooks for each endpoint
 export const useCategories = () => {
-  return useApi(() => getCategories(), []);
+  return useApi(() => fetchCategories(), []);
 };
 
 export const useProducts = () => {
-  return useApi(() => getProducts(), []);
+  return useApi(() => fetchProducts(), []);
 };
 
 export const useProduct = (id: string) => {
-  return useApi(() => getProduct(id), [id]);
+  return useApi(() => fetchProductById(id), [id]);
 };
