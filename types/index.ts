@@ -1,3 +1,5 @@
+
+
 export type Category = {
   id: string;
   name: string;
@@ -10,16 +12,17 @@ export type ProductImage = {
   id: string;
   image: string; // URL string
   alt_text?: string;
+  product?: string; // Product ID this image belongs to
 };
 
 export type Product = {
   id: string;
   name: string;
   description: string;
-  price_amount: number; // Note the underscore
+  price_amount: number;
   currency: string;
-  images: ProductImage[];
-  category: Category;
+  images?: ProductImage[];
+  category?: Category;
   in_stock?: boolean;
   sku?: string;
   created_at?: string;
@@ -37,6 +40,7 @@ export type FilterState = {
   sortOrder: 'asc' | 'desc' | null;
   searchQuery: string;
 };
+
 
 // types
 export interface Category {

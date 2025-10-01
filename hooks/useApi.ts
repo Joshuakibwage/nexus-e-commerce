@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
-import { fetchCategories, fetchProducts, fetchProductById, Category, Product } from '@/lib/api';
+import { 
+  fetchCategories, 
+  fetchProductsWithImages, 
+  fetchProductWithImages,
+  Category, 
+  Product 
+} from '@/lib/api';
 
 // Generic API hook
 export const useApi = <T,>(fetcher: () => Promise<T>, deps: any[] = []) => {
@@ -44,10 +50,12 @@ export const useCategories = () => {
   return useApi(() => fetchCategories(), []);
 };
 
+// Use the enhanced version that includes images
 export const useProducts = () => {
-  return useApi(() => fetchProducts(), []);
+  return useApi(() => fetchProductsWithImages(), []);
 };
 
+// Use the enhanced version for single product
 export const useProduct = (id: string) => {
-  return useApi(() => fetchProductById(id), [id]);
+  return useApi(() => fetchProductWithImages(id), [id]);
 };

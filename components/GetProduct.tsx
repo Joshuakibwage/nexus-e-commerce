@@ -4,8 +4,6 @@ import { useProduct } from '@/hooks/useApi';
 import { Product } from '@/types';
 import Link from 'next/link';
 import { getImageUrl, formatPrice } from '@/lib/utils';
-import Image from 'next/image';
-
 
 interface GetProductProps {
   productId: string;
@@ -22,9 +20,13 @@ export const GetProduct = ({ productId }: GetProductProps) => {
 };
 
 const ProductDetail = ({ product }: { product: Product }) => {
+  // Safely handle images and category
+  const images = product.images || [];
+  const mainImage = images.length > 0 ? images[0] : null;
+  const category = product.category || { id: '', name: 'Uncategorized', description: '' };
+
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Breadcrumb */}
       <nav className="mb-6">
         <Link 
           href="/" 
@@ -39,10 +41,10 @@ const ProductDetail = ({ product }: { product: Product }) => {
           {/* Product Images */}
           <div>
             <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
-              {product.images.length > 0 ? (
-                <Image
-                  src={getImageUrl(product.images[0].id)}
-                  alt={product.name}
+              {mainImage ? (
+                <img
+                  src={getImageUrl(mainImage.image)}
+                  alt={mainImage.alt_text || product.name}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -52,17 +54,17 @@ const ProductDetail = ({ product }: { product: Product }) => {
               )}
             </div>
             
-            {/* Thumbnail Gallery */}
-            {product.images.length > 1 && (
+            {/* Thumbnail Gallery - Only show if there are multiple images */}
+            {images.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
-                {product.images.map((image) => (
+                {images.map((image) => (
                   <div
                     key={image.id}
                     className="aspect-square bg-gray-100 rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-blue-500"
                   >
-                    <Image
-                      src={getImageUrl(image.id)}
-                      alt={product.name}
+                    <img
+                      src={getImageUrl(image.image)}
+                      alt={image.alt_text || product.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -75,7 +77,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
           <div className="flex flex-col">
             <div className="mb-4">
               <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium mb-2">
-                {product.category.name}
+                {category.name}
               </span>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 {product.name}
@@ -88,21 +90,32 @@ const ProductDetail = ({ product }: { product: Product }) => {
             <div className="mt-auto">
               <div className="flex items-baseline gap-2 mb-4">
                 <span className="text-3xl font-bold text-gray-900">
-                  {formatPrice(product.priceAmount, product.currency)}
+                  {formatPrice(product.price_amount, product.currency)}
                 </span>
               </div>
 
               <div className="space-y-4">
-                <button className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200">
-                  Add to Cart
+                <button 
+                  className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors duration-200 ${
+                    product.in_stock
+                      ? 'bg-blue-600 text-white hover:bg-blue-700'
+                      : 'bg-gray-400 text-gray-700 cursor-not-allowed'
+                  }`}
+                  disabled={!product.in_stock}
+                >
+                  {product.in_stock ? 'Add to Cart' : 'Out of Stock'}
                 </button>
                 
                 <div className="border-t pt-4">
                   <h3 className="font-semibold mb-2">Product Details</h3>
                   <ul className="text-sm text-gray-600 space-y-1">
-                    <li>• Category: {product.category.name}</li>
+                    <li>• Category: {category.name}</li>
                     <li>• Product ID: {product.id}</li>
-                    <li>• Available for immediate purchase</li>
+                    <li>• SKU: {product.sku || 'N/A'}</li>
+                    <li>• {product.in_stock ? 'In Stock' : 'Out of Stock'}</li>
+                    {product.created_at && (
+                      <li>• Added: {new Date(product.created_at).toLocaleDateString()}</li>
+                    )}
                   </ul>
                 </div>
               </div>

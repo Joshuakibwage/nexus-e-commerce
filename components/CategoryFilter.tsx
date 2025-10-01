@@ -18,7 +18,7 @@ export const CategoryFilter = () => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border">
       <div className="flex justify-between items-center mb-3">
-        <h3 className="font-semibold">Filter by Category</h3>
+        <h3 className="font-semibold text-gray-700">Filter by Category</h3>
         {hasActiveFilters && (
           <button
             onClick={() => dispatch(clearFilters())}

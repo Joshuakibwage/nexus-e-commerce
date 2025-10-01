@@ -32,12 +32,30 @@ export const ProductList = () => {
   const { data: products, loading, error } = useProducts();
   const { selectedCategory, sortOrder, searchQuery } = useSelector((state: RootState) => state.filters);
 
+  // Log the actual API response to see the structure
+  console.log('📦 Products from API:', products);
 
+  // Check for products with missing categories
+  if (products) {
+    const productsWithMissingCategories = products.filter(p => !p.category);
+    if (productsWithMissingCategories.length > 0) {
+      console.warn('⚠️ Products with missing categories:', productsWithMissingCategories);
+    }
+  }
+
+  // Filter and sort products based on current filters
   const filteredAndSortedProducts = useMemo(() => {
     if (!products) return [];
 
+    // Log individual product structure
+    if (products.length > 0) {
+      console.log('🔍 Sample product structure:', products[0]);
+      console.log('🔍 Product images:', products[0].images);
+    }
+
     let filteredProducts = products.filter((product: Product) => {
-      const matchesCategory = !selectedCategory || product.category.id === selectedCategory;
+      const categoryId = product.category?.id;
+      const matchesCategory = !selectedCategory || categoryId === selectedCategory;
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            product.description.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
@@ -47,8 +65,8 @@ export const ProductList = () => {
     if (sortOrder) {
       filteredProducts = filteredProducts.sort((a: Product, b: Product) => {
         return sortOrder === 'asc' 
-          ? a.priceAmount - b.priceAmount 
-          : b.priceAmount - a.priceAmount;
+          ? a.price_amount - b.price_amount 
+          : b.price_amount - a.price_amount;
       });
     }
 
