@@ -23,6 +23,12 @@ export default function Layout({ children }: LayoutProps) {
               </h1>
             </Link>
 
+            <div className="space-x-3 ">
+              <Link href="/" className="hover:text-blue-600">Home</Link>
+              <Link href="/accordion" className="hover:text-blue-600">Accordion</Link>
+              <Link href="/about" className="hover:text-blue-600">About</Link>
+              <Link href="/contact" className="hover:text-blue-600">Contact</Link>
+            </div>
             
             <Link href="/cart" className="relative">
               <ShoppingCart className="w-6 h-6 text-white" />
