@@ -3,25 +3,31 @@
 import { useEffect, useState } from 'react';
 import { fetchCategories, fetchProducts } from '@/lib/api';
 
+interface Category {
+  id: number | string;
+  name: string;
+}
+
+interface Product {
+  id: number | string;
+  name: string;
+  currency: string;
+  price_amount: number;
+}
+
 export const ApiTest = () => {
-  const [categories, setCategories] = useState<any[]>([]);
-  const [products, setProducts] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const testApi = async () => {
       try {
-        console.log('🧪 Testing API endpoints...');
-        
-        // Test categories endpoint
         const categoriesData = await fetchCategories();
         setCategories(categoriesData);
-        console.log('✅ Categories loaded:', categoriesData);
-        
-        // Test products endpoint
+
         const productsData = await fetchProducts();
         setProducts(productsData);
-        console.log('✅ Products loaded:', productsData);
       } catch (error) {
         console.error('❌ API test failed:', error);
       } finally {
@@ -41,8 +47,6 @@ export const ApiTest = () => {
     );
   }
 
-  
-
   return (
     <div className="p-4 bg-green-50 border border-green-200 rounded-lg mb-4">
       <h3 className="font-semibold text-green-800">✅ API Connection Successful!</h3>
@@ -56,7 +60,9 @@ export const ApiTest = () => {
             </div>
           ))}
           {categories.length > 3 && (
-            <div className="text-xs text-gray-500">... and {categories.length - 3} more</div>
+            <div className="text-xs text-gray-500">
+              ... and {categories.length - 3} more
+            </div>
           )}
         </div>
         <div>
@@ -68,7 +74,9 @@ export const ApiTest = () => {
             </div>
           ))}
           {products.length > 3 && (
-            <div className="text-xs text-gray-500">... and {products.length - 3} more</div>
+            <div className="text-xs text-gray-500">
+              ... and {products.length - 3} more
+            </div>
           )}
         </div>
       </div>

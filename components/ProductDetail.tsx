@@ -39,7 +39,8 @@ const ProductDetail = () => {
                     <h1 className="text-3xl font-bold">{product?.name ?? 'Product name'}</h1>
                     <p className="text-gray-600 mt-4">{product?.description ?? 'No description available'}</p>
                     <p className="text-2xl font-bold mt-4">
-                        {formatPrice(product?.priceAmount ?? 0, product?.currency ?? 'USD')}
+                        {formatPrice(product?.price_amount ?? 0, product?.currency ?? 'USD')}
+                        
                     </p>
                     <p className="mt-2">
                         Category: {product?.category?.name ?? 'Uncategorized'}

@@ -20,7 +20,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
                     />
                     <h3 className="text-lg font-semibold">{product.name}</h3>
                     <p className="text-gray-600">{product.description}</p>
-                    <p className="text-gray-800 font-bold">{formatPrice(product.priceAmount, product.currency)}</p>
+                    <p className="text-gray-800 font-bold">{formatPrice(product.price_amount, product.currency)}</p>
                 </div>
             </Link>
         </div>

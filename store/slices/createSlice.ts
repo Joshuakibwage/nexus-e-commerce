@@ -66,7 +66,7 @@ const cartSlice = createSlice({
 // Helper functions
 function calculateTotal(items: CartItem[]): number {
   return items.reduce((total, item) => {
-    return total + (item.product.priceAmount * item.quantity);
+    return total + (item.product.price_amount * item.quantity);
   }, 0);
 }
 

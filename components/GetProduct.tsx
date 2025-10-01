@@ -4,6 +4,7 @@ import { useProduct } from '@/hooks/useApi';
 import { Product } from '@/types';
 import Link from 'next/link';
 import { getImageUrl, formatPrice } from '@/lib/utils';
+import Image from 'next/image';
 
 interface GetProductProps {
   productId: string;
@@ -42,7 +43,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
           <div>
             <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
               {mainImage ? (
-                <img
+                <Image
                   src={getImageUrl(mainImage.image)}
                   alt={mainImage.alt_text || product.name}
                   className="w-full h-full object-cover"
@@ -62,7 +63,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
                     key={image.id}
                     className="aspect-square bg-gray-100 rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-blue-500"
                   >
-                    <img
+                    <Image
                       src={getImageUrl(image.image)}
                       alt={image.alt_text || product.name}
                       className="w-full h-full object-cover"

@@ -7,7 +7,7 @@ import { Product } from '@/types';
 import ProductCard from './ProductCard';
 import { useMemo } from 'react';
 
-const ProductGridSkeleton = () => {
+function ProductGridSkeleton() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {Array.from({ length: 8 }).map((_, index) => (
@@ -26,47 +26,43 @@ const ProductGridSkeleton = () => {
       ))}
     </div>
   );
+}
+
+// Safe string function to handle undefined/null values
+const safeString = (str: string | undefined | null): string => {
+  return str || '';
 };
 
-export const ProductList = () => {
+export default function ProductList() {
   const { data: products, loading, error } = useProducts();
   const { selectedCategory, sortOrder, searchQuery } = useSelector((state: RootState) => state.filters);
-
-  // Log the actual API response to see the structure
-  console.log('📦 Products from API:', products);
-
-  // Check for products with missing categories
-  if (products) {
-    const productsWithMissingCategories = products.filter(p => !p.category);
-    if (productsWithMissingCategories.length > 0) {
-      console.warn('⚠️ Products with missing categories:', productsWithMissingCategories);
-    }
-  }
 
   // Filter and sort products based on current filters
   const filteredAndSortedProducts = useMemo(() => {
     if (!products) return [];
 
-    // Log individual product structure
-    if (products.length > 0) {
-      console.log('🔍 Sample product structure:', products[0]);
-      console.log('🔍 Product images:', products[0].images);
-    }
-
     let filteredProducts = products.filter((product: Product) => {
       const categoryId = product.category?.id;
       const matchesCategory = !selectedCategory || categoryId === selectedCategory;
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           product.description.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const productName = safeString(product.name);
+      const productDescription = safeString(product.description);
+      const searchTerm = safeString(searchQuery).toLowerCase();
+      
+      const matchesSearch = productName.toLowerCase().includes(searchTerm) ||
+                           productDescription.toLowerCase().includes(searchTerm);
+      
       return matchesCategory && matchesSearch;
     });
 
     // Sort products by price
     if (sortOrder) {
       filteredProducts = filteredProducts.sort((a: Product, b: Product) => {
+        const priceA = a.price_amount || 0;
+        const priceB = b.price_amount || 0;
         return sortOrder === 'asc' 
-          ? a.price_amount - b.price_amount 
-          : b.price_amount - a.price_amount;
+          ? priceA - priceB 
+          : priceB - priceA;
       });
     }
 
@@ -99,6 +95,4 @@ export const ProductList = () => {
       )}
     </div>
   );
-};
-
-export default ProductList;
+}

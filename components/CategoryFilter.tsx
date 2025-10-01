@@ -12,7 +12,7 @@ export const CategoryFilter = () => {
 
   const hasActiveFilters = selectedCategory !== null || sortOrder !== null || searchQuery !== '';
 
-  if (loading) return <div className="p-4">Loading categories...</div>;
+  if (loading) return <div className="p-4 text-gray-700">Loading categories...</div>;
   if (error) return <div className="p-4 text-red-600">Error loading categories: {error}</div>;
 
   return (

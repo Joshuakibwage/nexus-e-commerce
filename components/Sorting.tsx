@@ -10,7 +10,7 @@ export const Sorting = () => {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border">
-      <h3 className="font-semibold mb-3">Sort by Price</h3>
+      <h3 className="font-semibold mb-3 text-gray-700">Sort by Price</h3>
       <select
         value={sortOrder || ''}
         onChange={(e) => dispatch(setSortOrder(e.target.value as 'asc' | 'desc' | null))}
